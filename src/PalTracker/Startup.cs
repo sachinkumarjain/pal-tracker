@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Steeltoe.CloudFoundry.Connector.MySql.EFCore;
 using Microsoft.Extensions.Hosting;
-
 namespace PalTracker
 {
     public class Startup
@@ -35,7 +35,9 @@ namespace PalTracker
                 Configuration.GetValue<string>("CF_INSTANCE_ADDR")
             ));
 
-            services.AddSingleton<ITimeEntryRepository, InMemoryTimeEntryRepository>();
+            //services.AddSingleton<ITimeEntryRepository, InMemoryTimeEntryRepository>();
+            services.AddScoped<ITimeEntryRepository, MySqlTimeEntryRepository>();
+            services.AddDbContext<TimeEntryContext>(options => options.UseMySql(Configuration));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
